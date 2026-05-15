@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "codex-web": {
+      "type": "stdio",
+      "command": "/opt/codex-web-mcp/go/bin/codex-web-mcp",
+      "args": [],
+      "env": {
+        "CODEX_BIN": "codex"
+      }
+    }
+  }
+}

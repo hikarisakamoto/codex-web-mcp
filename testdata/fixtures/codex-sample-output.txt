@@ -1,0 +1,21 @@
+OpenAI Codex v0.121.0 (research preview)
+--------
+workdir: S:\repos\purr
+model: gpt-5.4
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: medium
+reasoning summaries: auto
+--------
+[2026-01-15T10:23:45] User instructions:
+What is 2+2?
+
+[2026-01-15T10:23:46] thinking
+Simple arithmetic question.
+
+[2026-01-15T10:23:46] codex
+2+2 equals 4.
+
+[2026-01-15T10:23:47] tokens used
+12,556

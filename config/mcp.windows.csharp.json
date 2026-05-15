@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "codex-web": {
+      "type": "stdio",
+      "command": "S:\\repos\\codex-web-mcp\\csharp\\src\\CodexWebMcp\\publish\\CodexWebMcp.exe",
+      "args": [],
+      "env": {
+        "CODEX_BIN": "codex.exe"
+      }
+    }
+  }
+}

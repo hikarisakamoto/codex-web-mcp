@@ -1,0 +1,26 @@
+# Build output
+bin/
+obj/
+publish/
+go/bin/
+
+# IDE / editor
+*.user
+.vs/
+.idea/
+.vscode/settings.json
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local environment
+.env
+.env.local
+
+# Cache directories (local dev)
+.cache/

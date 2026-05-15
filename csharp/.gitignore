@@ -1,0 +1,35 @@
+# .NET build artifacts
+bin/
+obj/
+publish/
+out/
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.userprefs
+
+# Build outputs (only inside bin/obj — top-level shouldn't have these anyway)
+**/bin/**/*.dll
+**/bin/**/*.pdb
+**/bin/**/*.exe
+**/obj/**/*.dll
+**/obj/**/*.pdb
+**/obj/**/*.exe
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# OS
+.DS_Store
+Thumbs.db
