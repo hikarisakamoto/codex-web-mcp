@@ -5,16 +5,32 @@
     over stdio and checking for the three expected tool names.
 
 .PARAMETER BinaryPath
-    Path to the codex-web-mcp server executable.
+    Path to the codex-web-mcp server executable, OR the launcher (e.g.
+    "java", "node", "python") if invoking a non-binary implementation.
+
+.PARAMETER ExtraArgs
+    Additional arguments to pass to the launcher. Use for jar paths,
+    script paths, or module names. Examples:
+
+      smoke-test.ps1 java -jar ./java/target/codex-web-mcp.jar
+      smoke-test.ps1 node ./node/dist/index.js
+      smoke-test.ps1 python -m codex_web_mcp
 #>
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [string]$BinaryPath
+    [string]$BinaryPath,
+
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$ExtraArgs
 )
 
 $ErrorActionPreference = 'Stop'
 
-if (-not (Test-Path -LiteralPath $BinaryPath)) {
+# If BinaryPath is a literal file path, verify it exists. If it's a
+# launcher on PATH (e.g. "java", "node", "python") we let the OS resolve
+# it when starting the process.
+$looksLikeLauncher = ($BinaryPath -notmatch '[\\/]' -and -not (Test-Path -LiteralPath $BinaryPath))
+if (-not $looksLikeLauncher -and -not (Test-Path -LiteralPath $BinaryPath)) {
     Write-Host "FAIL: binary not found: $BinaryPath" -ForegroundColor Red
     exit 1
 }
@@ -35,7 +51,14 @@ $initialized = '{"jsonrpc":"2.0","method":"notifications/initialized"}'
 $toolsList   = '{"jsonrpc":"2.0","id":2,"method":"tools/list"}'
 
 $psi = New-Object System.Diagnostics.ProcessStartInfo
-$psi.FileName               = (Resolve-Path -LiteralPath $BinaryPath).Path
+if ($looksLikeLauncher) {
+    $psi.FileName = $BinaryPath
+} else {
+    $psi.FileName = (Resolve-Path -LiteralPath $BinaryPath).Path
+}
+if ($ExtraArgs) {
+    foreach ($a in $ExtraArgs) { [void]$psi.ArgumentList.Add($a) }
+}
 $psi.UseShellExecute        = $false
 $psi.RedirectStandardInput  = $true
 $psi.RedirectStandardOutput = $true

@@ -1,24 +1,35 @@
 #!/usr/bin/env bash
-# Smoke-tests an MCP server binary by sending initialize + tools/list over
-# stdio and checking that all three expected tool names are advertised.
+# Smoke-tests an MCP server by sending initialize + tools/list over stdio
+# and checking that all three expected tool names are advertised.
 #
-# Usage: smoke-test.sh <path-to-binary>
+# Usage: smoke-test.sh <command-or-binary> [extra args...]
+#
+# Examples:
+#   smoke-test.sh ./go/bin/codex-web-mcp
+#   smoke-test.sh java -jar ./java/target/codex-web-mcp.jar
+#   smoke-test.sh node ./node/dist/index.js
+#   smoke-test.sh python -m codex_web_mcp
 
 set -uo pipefail
 
 if [ $# -lt 1 ]; then
-  echo "Usage: $0 <path-to-binary>" >&2
+  echo "Usage: $0 <command-or-binary> [extra args...]" >&2
   exit 2
 fi
 
 binary="$1"
+shift
 
-if [ ! -x "$binary" ]; then
-  if [ ! -e "$binary" ]; then
-    echo "FAIL: binary not found: $binary" >&2
-    exit 1
-  fi
-fi
+# If $binary contains a slash treat it as a file path and verify it exists;
+# otherwise assume it's a launcher on PATH (java, node, python, ...).
+case "$binary" in
+  */*)
+    if [ ! -e "$binary" ]; then
+      echo "FAIL: binary not found: $binary" >&2
+      exit 1
+    fi
+    ;;
+esac
 
 frame() {
   local body="$1"
@@ -39,10 +50,10 @@ err_file="$(mktemp)"
 trap 'rm -f "$output_file" "$err_file"' EXIT
 
 if command -v timeout >/dev/null 2>&1; then
-  printf '%s' "$payload" | timeout 10 "$binary" >"$output_file" 2>"$err_file" || true
+  printf '%s' "$payload" | timeout 10 "$binary" "$@" >"$output_file" 2>"$err_file" || true
 else
   # Fallback: launch in background, kill after 10s.
-  printf '%s' "$payload" | "$binary" >"$output_file" 2>"$err_file" &
+  printf '%s' "$payload" | "$binary" "$@" >"$output_file" 2>"$err_file" &
   pid=$!
   ( sleep 10 && kill "$pid" 2>/dev/null ) &
   watcher=$!
