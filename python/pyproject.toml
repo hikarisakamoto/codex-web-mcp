@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codex-web-mcp"
+version = "0.1.0"
+description = "Python implementation of codex-web-mcp: an MCP server that proxies web access through the OpenAI Codex CLI."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "mcp>=1.0.0",
+]
+
+[project.scripts]
+codex-web-mcp = "codex_web_mcp.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/codex_web_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
