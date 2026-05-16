@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "codex-web": {
+      "type": "stdio",
+      "command": "/opt/codex-web-mcp/fsharp/src/CodexWebMcp.FSharp/publish/CodexWebMcp.FSharp",
+      "args": [],
+      "env": {
+        "CODEX_BIN": "codex"
+      }
+    }
+  }
+}
