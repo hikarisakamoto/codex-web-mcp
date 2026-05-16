@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "codex-web": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/opt/codex-web-mcp/node/dist/index.js"],
+      "env": {
+        "CODEX_BIN": "codex"
+      }
+    }
+  }
+}
