@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "codex-web": {
+      "type": "stdio",
+      "command": "java",
+      "args": ["-jar", "/opt/codex-web-mcp/java/target/codex-web-mcp.jar"],
+      "env": {
+        "CODEX_BIN": "codex"
+      }
+    }
+  }
+}
